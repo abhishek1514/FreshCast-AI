@@ -1,0 +1,102 @@
+schema: '2.0'
+stages:
+  generate_data:
+    cmd: python -m freshcast.data.generator
+    deps:
+    - path: configs/default_config.yaml
+      hash: md5
+      md5: 3c5d699235043afe89eab9d6ad0c2285
+      size: 4007
+    - path: src/freshcast/data/generator.py
+      hash: md5
+      md5: 6db651192317435095912e5c1c86a3ba
+      size: 14105
+    outs:
+    - path: data/raw/foodservice_daily_sales.csv
+      hash: md5
+      md5: a48f1751135ca381f1e134fe0937d057
+      size: 4001775
+  train_and_backtest:
+    cmd: python -m freshcast.models.train
+    deps:
+    - path: configs/model_params.yaml
+      hash: md5
+      md5: 79dd657bb3fbe88e2594ed61ce56cce9
+      size: 677
+    - path: data/raw/foodservice_daily_sales.csv
+      hash: md5
+      md5: a48f1751135ca381f1e134fe0937d057
+      size: 4001775
+    - path: src/freshcast/features/calendar.py
+      hash: md5
+      md5: a2e96e626097fb680896756d31694a8c
+      size: 2661
+    - path: src/freshcast/features/lags.py
+      hash: md5
+      md5: d829e86d5b01c2f74b011214df4ec858
+      size: 3020
+    - path: src/freshcast/features/pipeline.py
+      hash: md5
+      md5: 30410e4152aea7390875b21304c85d19
+      size: 4083
+    - path: src/freshcast/models/backtest.py
+      hash: md5
+      md5: 3bc87b170d76a2ec04483492a8cc4342
+      size: 5961
+    - path: src/freshcast/models/baselines.py
+      hash: md5
+      md5: 5591172b50df8852f5e7e391df2e41e0
+      size: 1853
+    - path: src/freshcast/models/gbdt.py
+      hash: md5
+      md5: 83001cb9308c59d67be604817bf7513f
+      size: 4558
+    - path: src/freshcast/models/train.py
+      hash: md5
+      md5: 278c8d48a71d2e2490949f38ff236d9a
+      size: 8242
+    outs:
+    - path: data/processed/backtest_results.csv
+      hash: md5
+      md5: 064431a526a25b2fde54c05eb3b5f11f
+      size: 3315
+    - path: data/processed/backtest_summary.csv
+      hash: md5
+      md5: 67456e5e839ef5c158cb412494e991a7
+      size: 877
+    - path: data/processed/feature_importance.csv
+      hash: md5
+      md5: 6c37017f75e53eaca00ba0dbb6083b3f
+      size: 826
+    - path: models/champion_model.joblib
+      hash: md5
+      md5: a434638ef1b86e418c7db2c83530e795
+      size: 1344723
+  evaluate_financials:
+    cmd: python -m freshcast.metrics.evaluate
+    deps:
+    - path: models/champion_model.joblib
+      hash: md5
+      md5: a434638ef1b86e418c7db2c83530e795
+      size: 1344723
+    - path: src/freshcast/metrics/evaluate.py
+      hash: md5
+      md5: b04aa90b0ad8de41df7be6283ccf071e
+      size: 3674
+    - path: src/freshcast/metrics/financial.py
+      hash: md5
+      md5: b860ba2b7b9198846dac9e3164589ba2
+      size: 2651
+    - path: src/freshcast/metrics/standard.py
+      hash: md5
+      md5: 07f7ba4bf754870dd474ed94c59f90c6
+      size: 2201
+    outs:
+    - path: data/processed/category_evaluation_report.csv
+      hash: md5
+      md5: 3a593ac3d7ff31642660d09a1a968d9e
+      size: 483
+    - path: data/processed/sku_evaluation_report.csv
+      hash: md5
+      md5: 61065b703f27df27c080771745cf7f31
+      size: 1282

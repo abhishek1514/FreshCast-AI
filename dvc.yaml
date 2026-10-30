@@ -1,0 +1,37 @@
+stages:
+  generate_data:
+    cmd: python -m freshcast.data.generator
+    deps:
+      - src/freshcast/data/generator.py
+      - configs/default_config.yaml
+    outs:
+      - data/raw/foodservice_daily_sales.csv
+
+  train_and_backtest:
+    cmd: python -m freshcast.models.train
+    deps:
+      - data/raw/foodservice_daily_sales.csv
+      - src/freshcast/features/calendar.py
+      - src/freshcast/features/lags.py
+      - src/freshcast/features/pipeline.py
+      - src/freshcast/models/backtest.py
+      - src/freshcast/models/baselines.py
+      - src/freshcast/models/gbdt.py
+      - src/freshcast/models/train.py
+      - configs/model_params.yaml
+    outs:
+      - models/champion_model.joblib
+      - data/processed/backtest_results.csv
+      - data/processed/backtest_summary.csv
+      - data/processed/feature_importance.csv
+
+  evaluate_financials:
+    cmd: python -m freshcast.metrics.evaluate
+    deps:
+      - models/champion_model.joblib
+      - src/freshcast/metrics/financial.py
+      - src/freshcast/metrics/standard.py
+      - src/freshcast/metrics/evaluate.py
+    outs:
+      - data/processed/category_evaluation_report.csv
+      - data/processed/sku_evaluation_report.csv

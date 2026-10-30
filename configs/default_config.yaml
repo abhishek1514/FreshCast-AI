@@ -1,0 +1,152 @@
+# FreshCast System & Supply Chain Configuration
+
+project:
+  name: "FreshCast"
+  version: "0.1.0"
+  random_seed: 42
+
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  start_date: "2022-01-01"
+  end_date: "2024-03-31" # ~2.25 years of daily history
+  frequency: "D"
+
+distribution_centers:
+  - id: "DC_BOS"
+    name: "Northeast Distribution Center (Boston)"
+    capacity_cases: 500000
+    base_volume_multiplier: 1.15
+  - id: "DC_ATL"
+    name: "Southeast Distribution Center (Atlanta)"
+    capacity_cases: 650000
+    base_volume_multiplier: 1.25
+  - id: "DC_CHI"
+    name: "Midwest Distribution Center (Chicago)"
+    capacity_cases: 750000
+    base_volume_multiplier: 1.40
+
+# Perishable & High-Turnover Foodservice Categories & SKUs
+skus:
+  - id: "SKU_BEEF_SIRLOIN"
+    name: "Choice Angus Beef Sirloin (10 lb case)"
+    category: "Meat & Poultry"
+    shelf_life_days: 6
+    lead_time_days: 2
+    unit_cost: 85.00
+    unit_price: 110.00
+    spoilage_cost_factor: 1.0  # 100% loss upon expiration
+    stockout_penalty_multiplier: 1.5  # Lost margin + client goodwill penalty
+    base_daily_demand: 120
+
+  - id: "SKU_CHICKEN_BREAST"
+    name: "Fresh Boneless Chicken Breast (40 lb case)"
+    category: "Meat & Poultry"
+    shelf_life_days: 5
+    lead_time_days: 2
+    unit_cost: 62.00
+    unit_price: 82.00
+    spoilage_cost_factor: 1.0
+    stockout_penalty_multiplier: 1.4
+    base_daily_demand: 240
+
+  - id: "SKU_SALMON_FILLET"
+    name: "Atlantic Fresh Salmon Fillets (10 lb case)"
+    category: "Seafood"
+    shelf_life_days: 4
+    lead_time_days: 2
+    unit_cost: 95.00
+    unit_price: 130.00
+    spoilage_cost_factor: 1.0
+    stockout_penalty_multiplier: 1.6
+    base_daily_demand: 90
+
+  - id: "SKU_ROMAINE_HEARTS"
+    name: "Organic Romaine Hearts (12 count case)"
+    category: "Produce"
+    shelf_life_days: 5
+    lead_time_days: 1
+    unit_cost: 18.00
+    unit_price: 28.00
+    spoilage_cost_factor: 1.0
+    stockout_penalty_multiplier: 1.3
+    base_daily_demand: 320
+
+  - id: "SKU_ROMA_TOMATOES"
+    name: "Vine Ripe Roma Tomatoes (25 lb box)"
+    category: "Produce"
+    shelf_life_days: 6
+    lead_time_days: 1
+    unit_cost: 22.00
+    unit_price: 34.00
+    spoilage_cost_factor: 1.0
+    stockout_penalty_multiplier: 1.3
+    base_daily_demand: 280
+
+  - id: "SKU_AVOCADO_HASS"
+    name: "Hass Avocados Grade A (48 count case)"
+    category: "Produce"
+    shelf_life_days: 5
+    lead_time_days: 2
+    unit_cost: 38.00
+    unit_price: 54.00
+    spoilage_cost_factor: 0.9
+    stockout_penalty_multiplier: 1.4
+    base_daily_demand: 160
+
+  - id: "SKU_HEAVY_CREAM"
+    name: "Grade A Heavy Whipping Cream 36% (12x1 qt)"
+    category: "Dairy"
+    shelf_life_days: 14
+    lead_time_days: 2
+    unit_cost: 32.00
+    unit_price: 45.00
+    spoilage_cost_factor: 0.8
+    stockout_penalty_multiplier: 1.25
+    base_daily_demand: 180
+
+  - id: "SKU_CHEDDAR_CHEESE"
+    name: "Sharp White Cheddar Block (10 lb)"
+    category: "Dairy"
+    shelf_life_days: 28
+    lead_time_days: 3
+    unit_cost: 42.00
+    unit_price: 58.00
+    spoilage_cost_factor: 0.5
+    stockout_penalty_multiplier: 1.2
+    base_daily_demand: 150
+
+  - id: "SKU_FRENCH_FRIES"
+    name: "Grade A Crispy Thin French Fries (6x5 lb case)"
+    category: "Frozen"
+    shelf_life_days: 180
+    lead_time_days: 4
+    unit_cost: 24.00
+    unit_price: 36.00
+    spoilage_cost_factor: 0.1 # Very low spoilage risk
+    stockout_penalty_multiplier: 1.2
+    base_daily_demand: 450
+
+  - id: "SKU_CANOLA_OIL"
+    name: "Pure Canola Frying Oil (35 lb jug-in-box)"
+    category: "Dry & Pantry"
+    shelf_life_days: 240
+    lead_time_days: 5
+    unit_cost: 28.00
+    unit_price: 40.00
+    spoilage_cost_factor: 0.05
+    stockout_penalty_multiplier: 1.2
+    base_daily_demand: 210
+
+features:
+  lags: [1, 2, 3, 7, 14, 21, 28]
+  rolling_windows: [7, 14, 28]
+  forecast_horizons: [7, 14, 30]
+
+backtest:
+  n_splits: 4
+  test_window_days: 28
+  gap_days: 0
+
+service_level:
+  target_cycle_service_level: 0.95 # 95% service level for safety stock (z ~ 1.645)

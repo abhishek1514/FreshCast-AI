@@ -1,0 +1,32 @@
+lightgbm:
+  objective: "regression_l1"  # MAE aligned to WAPE minimization
+  metric: "mae"
+  boosting_type: "gbdt"
+  n_estimators: 300
+  learning_rate: 0.05
+  num_leaves: 31
+  max_depth: 6
+  subsample: 0.85
+  feature_fraction: 0.85
+  min_child_samples: 20
+  random_state: 42
+  verbose: -1
+
+xgboost:
+  objective: "reg:absoluteerror"
+  n_estimators: 300
+  learning_rate: 0.05
+  max_depth: 6
+  subsample: 0.85
+  colsample_bytree: 0.85
+  random_state: 42
+  verbosity: 0
+
+prophet:
+  growth: "linear"
+  daily_seasonality: false
+  weekly_seasonality: true
+  yearly_seasonality: true
+  seasonality_mode: "multiplicative"
+  changepoint_prior_scale: 0.05
+  seasonality_prior_scale: 10.0

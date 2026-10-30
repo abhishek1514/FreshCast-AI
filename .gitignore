@@ -1,0 +1,20 @@
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+.DS_Store
+
+# Data & Model artifacts managed via DVC
+data/raw/*.csv
+data/processed/*.csv
+models/*.joblib
+
+# Local MLflow runs & SQLite db
+mlruns.db
+mlruns/

@@ -1,0 +1,10 @@
+DATA SOURCE: FreshRetailNet-50K, Dingdong-Inc, Hugging Face.
+License: Creative Commons Attribution 4.0 International (CC BY 4.0).
+Dataset: https://huggingface.co/datasets/Dingdong-Inc/FreshRetailNet-50K
+Paper: https://arxiv.org/abs/2505.16319
+Observed target: sale_amount, a globally normalized sales measure; not literal cases.
+Observed covariates: discount, activity/holiday flags, precipitation, temperature, humidity, wind.
+IMPORTANT: source dataset does not provide actual item costs, prices, shelf lives, or lead times.
+Inventory financial estimates in this demo use illustrative assumptions (unit_cost=1.00, price=1.30,
+shelf_life=5 days, lead_time=2 days, spoilage_factor=0.5, stockout_multiplier=1.3).
+Do not represent those assumptions as real supplier financials.
